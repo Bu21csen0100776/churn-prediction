@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Churn Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f4f4f4;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+        }
+        button {
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: darkblue;
+        }
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Churn Prediction</h2>
+    <form id="churnForm">
+        <label>Senior Citizen:</label>
+        <select id="SeniorCitizen">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+
+        <label>Tenure (Months):</label>
+        <input type="number" id="tenure" required>
+
+        <label>Monthly Charges:</label>
+        <input type="number" id="MonthlyCharges" required>
+
+        <label>Total Charges:</label>
+        <input type="number" id="TotalCharges" required>
+
+        <label>Gender:</label>
+        <select id="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label>Partner:</label>
+        <select id="Partner">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>Dependents:</label>
+        <select id="Dependents">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>Phone Service:</label>
+        <select id="PhoneService">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>Internet Service:</label>
+        <select id="InternetService">
+            <option value="DSL">DSL</option>
+            <option value="Fiber optic">Fiber optic</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>Contract:</label>
+        <select id="Contract">
+            <option value="Month-to-month">Month-to-month</option>
+            <option value="One year">One year</option>
+            <option value="Two year">Two year</option>
+        </select>
+
+        <label>Payment Method:</label>
+        <select id="PaymentMethod">
+            <option value="Electronic check">Electronic check</option>
+            <option value="Mailed check">Mailed check</option>
+            <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+            <option value="Credit card (automatic)">Credit card (automatic)</option>
+        </select>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <p id="result"></p>
+</div>
+
+<script>
+    document.getElementById("churnForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        // Collect user inputs
+        const data = {
+            "SeniorCitizen": parseInt(document.getElementById("SeniorCitizen").value),
+            "tenure": parseInt(document.getElementById("tenure").value),
+            "MonthlyCharges": parseFloat(document.getElementById("MonthlyCharges").value),
+            "TotalCharges": parseFloat(document.getElementById("TotalCharges").value),
+            "gender": document.getElementById("gender").value,
+            "Partner": document.getElementById("Partner").value,
+            "Dependents": document.getElementById("Dependents").value,
+            "PhoneService": document.getElementById("PhoneService").value,
+            "InternetService": document.getElementById("InternetService").value,
+            "Contract": document.getElementById("Contract").value,
+            "PaymentMethod": document.getElementById("PaymentMethod").value
+        };
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById("result").innerText = `Churn Prediction: ${result.churn_prediction ? "Likely to Churn" : "Not Likely to Churn"}`;
+        } catch (error) {
+            document.getElementById("result").innerText = "Error: Unable to connect to API.";
+        }
+    });
+</script>
+
+</body>
+</html>
