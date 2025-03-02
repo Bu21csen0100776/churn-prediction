@@ -171,7 +171,9 @@
             const result = await response.json();
             console.log("API Response:", result);
 
-            document.getElementById("result").innerText = result.churn_prediction ? "Likely to Churn" : "Not Likely to Churn";
+            const prediction = result.churn_prediction ? "Likely to Churn" : "Not Likely to Churn";
+window.location.href = `result.html?prediction=${encodeURIComponent(prediction)}`;
+
         } catch (error) {
             console.error("Error:", error);
             document.getElementById("result").innerText = "Error: Unable to connect to API.";
