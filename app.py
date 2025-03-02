@@ -11,7 +11,7 @@ CORS(app)
 
 # Load the trained model and feature names
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "churn_model.pkl")
+MODEL_PATH = os.path.join(BASE_DIR, "churn_model1.pkl")
 FEATURES_PATH = os.path.join(BASE_DIR, "feature_names.json")
 
 model, feature_order = None, None
